@@ -1,6 +1,6 @@
 
 /**
- * Controller to handel Rest request :https://localhost:8080/person/*
+ * Controller to handel Rest request :https://localhost:8080/persons/*
  *
  */
 package com.test.covidTracker.controllers;
@@ -17,14 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.test.covidTracker.models.CaseCovid;
-import com.test.covidTracker.models.CaseResponseTemplate;
 import com.test.covidTracker.models.Person;
 import com.test.covidTracker.services.CaseService;
 import com.test.covidTracker.services.PersonService;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/persons")
 public class PersonController {
 
 	PersonService personService;
@@ -45,24 +43,12 @@ public class PersonController {
 		return new ResponseEntity<>(personService.getPerson(personId).get(), HttpStatus.OK);
 	}
 
-	@GetMapping({ "/{personId}/cases" })
-	public ResponseEntity<CaseResponseTemplate> getCases(@PathVariable int personId) {
-		return new ResponseEntity<>(caseService.getCaseByPerson(personId), HttpStatus.OK);
-	}
-
-	@PostMapping({ "/{personId}/case" })
-	public ResponseEntity<CaseCovid> saveCase(@PathVariable int personId, @RequestBody CaseCovid _case) {
-		caseService.Insert(_case, personId);
-		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("case", "/{personId}/case" + _case.getId().toString());
-		return new ResponseEntity<>(_case, httpHeaders, HttpStatus.CREATED);
-	}
 
 	@PostMapping({ "/{personId}" })
 	public ResponseEntity<Person> savePerson(@PathVariable int personId, @RequestBody Person person) {
 		personService.insertPerson(personId, person);
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("person", "/person" + String.valueOf(personId));
+		httpHeaders.add("person", "/persons" + String.valueOf(personId));
 		return new ResponseEntity<>(person, httpHeaders, HttpStatus.CREATED);
 	}
 }

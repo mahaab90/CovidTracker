@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.test.covidTracker.models.Person;
@@ -52,7 +53,7 @@ public class PersonServiceImpl implements PersonService{
 	public List<Person> getPersons() {
 		// TODO Auto-generated method stub
 		List<Person> persons = new ArrayList<>();
-		personRepository.findAll().forEach(persons::add);
+		personRepository.findAll(Sort.by(Sort.Direction.ASC, "cin")).forEach(persons::add);
         return persons;
 	}
 

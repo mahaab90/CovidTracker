@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.test.covidTracker.models.CaseCovid;
@@ -27,7 +28,7 @@ public class CaseServiceImpl implements CaseService{
 	@Override
 	public List<CaseCovid> getCases() {
 		List<CaseCovid> cases= new ArrayList<>();
-		caseRepository.findAll().forEach(cases::add);
+		caseRepository.findAll(Sort.by(Sort.Direction.ASC, "testDate")).forEach(cases::add);
         return cases;
 	}
 
@@ -46,8 +47,12 @@ public class CaseServiceImpl implements CaseService{
 		 List<CaseCovid> cases=caseRepository.findByPerson(person);
 		 CaseResponseTemplate caseResponseTemplate=new CaseResponseTemplate();
 		 caseResponseTemplate.setCases(cases);
-		 caseResponseTemplate.setPerson(person);
-		 return caseResponseTemplate;
+
+		 caseResponseTemplate.setAdress(person.getAdress());
+         caseResponseTemplate.setAge(person.getAge());
+         caseResponseTemplate.setCin(person.getCin());
+         caseResponseTemplate.setName(person.getName());
+         return caseResponseTemplate;
 	}
 
 	@Override
@@ -69,7 +74,6 @@ public class CaseServiceImpl implements CaseService{
 		// TODO Auto-generated method stub
 		return caseRepository.findById(id).map(caseFromDB -> {
 			caseFromDB.setCity(_case.getCity());
-			caseFromDB.setPerson(_case.getPerson());
 			caseFromDB.setTestDate(_case.getTestDate());
 			caseFromDB.setTestResult(_case.getTestResult());
             return caseRepository.save(caseFromDB);
@@ -84,6 +88,12 @@ public class CaseServiceImpl implements CaseService{
             return caseRepository.save(_case);
         });
 	}
+
+	@Override
+	public List<CaseCovid> getCaseByYearMonth(int year, int month) {
+		// TODO Auto-generated method stub
+		return caseRepository.getByYearAndMonth(year, month);
+		}
 
 
 

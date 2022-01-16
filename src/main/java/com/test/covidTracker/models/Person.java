@@ -38,6 +38,20 @@ public class Person {
 	private String adress;
 	private int age;
 
+	
+	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private Set<Vaccination> vacinations;
+	
+	
+	public void setVaccinations(Set<Vaccination> vacinations) {
+		this.vacinations = vacinations;
+		for (Vaccination vaccin : vacinations) {
+			vaccin.setPerson(this);
+		}
+	}
+	
+	
+	
 	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private Set<CaseCovid> cases;
@@ -48,8 +62,9 @@ public class Person {
 			_case.setPerson(this);
 		}
 	}
+	
 
-	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private Set<Vaccination> vacinations;
+
+
 
 }

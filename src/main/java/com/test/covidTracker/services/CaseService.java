@@ -16,4 +16,5 @@ public interface CaseService {
 	void Insert(CaseCovid _case, int personId);
 	void Delete(Long id);
 	Optional<CaseCovid> updateCase(Long id, CaseCovid _case);
+	List<CaseCovid>  getCaseByYearMonth(int year, int month);
 }
